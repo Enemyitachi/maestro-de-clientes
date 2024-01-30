@@ -7,6 +7,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
 import org.acme.curp.rfc.modelo.ValidaRfcRequest;
 import org.acme.curp.rfc.modelo.ValidaRfcResponse;
@@ -24,7 +25,12 @@ public class ValidaRfcController {
 
     @POST
     @Path("/validar-rfc")
-    public ValidaRfcResponse obtieneRfc(ValidaRfcRequest rfc){
-        return validaRfcResponse.nubariumApi(rfc);
+    public String obtieneRfc(ValidaRfcRequest rfc){
+        Response response = validaRfcResponse.nubariumApi(rfc);
+        if (response.getStatus() != 200){
+            return "Servicio de Nubarium abajo";
+        }else{
+            return validaRfcResponse.nubariumApi(rfc).readEntity(String.class);
+        }
     }
 }

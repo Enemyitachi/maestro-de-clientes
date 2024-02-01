@@ -1,11 +1,11 @@
-package org.acme.curp.rfc.modelo;
+package org.acme.curp.validarfc.modelo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import org.acme.curp.rfc.servicio.NubariumApiClient;
+import org.acme.curp.validarfc.servicio.NubariumApiClient;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.Base64;

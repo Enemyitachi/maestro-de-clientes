@@ -3,6 +3,8 @@ package org.acme.curp.obtienecurp.servicio;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.acme.curp.obtienecurp.modelo.ObtieneCurpRequest;
 import org.acme.curp.obtienecurp.modelo.ObtieneCurpResponse;
 import org.acme.curp.validacurp.modelo.ValidaCurpResponse;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -14,8 +16,8 @@ public interface NubariumApiClient {
     @Path("/renapo/obtener_curp")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ObtieneCurpResponse obtieneCurp(
+    Response obtieneCurp(
             @HeaderParam("Authorization") String authorizationHeader,
-            String datos
+            ObtieneCurpRequest datos
     );
 }

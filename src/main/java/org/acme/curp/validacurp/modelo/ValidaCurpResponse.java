@@ -41,19 +41,4 @@ public class ValidaCurpResponse {
     public String estatusCurp;
     @JsonProperty("codigoMensaje")
     public String codigoMensaje;
-
-    @Inject
-    @RestClient
-    NubariumApiClient nubariumApiClient;
-
-    public ValidaCurpResponse nubariumApi(String curp){
-        String username = "axa-guillermocamachodelapaz";
-        String password = "kb_#7Y.9D";
-
-        String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-
-        return nubariumApiClient.validaCurp(authorizationHeader,curp);
-    }
-
-
 }

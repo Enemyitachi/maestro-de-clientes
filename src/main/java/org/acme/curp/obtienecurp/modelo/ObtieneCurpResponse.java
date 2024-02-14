@@ -38,19 +38,4 @@ public class ObtieneCurpResponse {
     public String estatusCurp;
     @JsonProperty("codigoMensaje")
     public String codigoMensaje;
-
-    @Inject
-    @RestClient
-    NubariumApiClient nubariumApiClient;
-
-    public ObtieneCurpResponse nubariumApi(String curp){
-        String username = "axa-guillermocamachodelapaz";
-        String password = "kb_#7Y.9D";
-
-        String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-
-        return nubariumApiClient.obtieneCurp(authorizationHeader,curp);
-    }
-
-
 }

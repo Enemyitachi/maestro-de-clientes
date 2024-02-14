@@ -24,46 +24,4 @@ public class ValidaRfcResponse {
     public String mensaje;
     @JsonProperty("tipoPersona")
     public String tipoPersona;
-
-    @Inject
-    @RestClient
-    NubariumApiClient nubariumApiClient;
-
-    public Response nubariumApi(ValidaRfcRequest datos){
-        String username = "axa-guillermocamachodelapaz";
-        String password = "kb_#7Y.9D";
-
-        String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-    try{
-        Response response = nubariumApiClient.validaRfc(authorizationHeader,datos);
-
-        int status = response.getStatus();
-        switch (status) {
-            case 200: // OK
-                return response;
-            case 400: // Bad Request
-                System.out.println("Bad request 400");
-                break;
-            case 401: // Unauthorized
-                System.out.println("Bad request");
-                break;
-            case 403:
-                System.out.println("Problema de credenciales");
-                break;
-            default:
-                System.out.println("Bad request");
-                break;
-        }
-        response.close();
-    }catch (WebApplicationException e) {
-        Response response = e.getResponse();
-        int status = response.getStatus();
-        System.out.println(status);
-        return response;
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-    }
-        return null;
-    }
 }

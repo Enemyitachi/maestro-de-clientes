@@ -20,6 +20,7 @@ import java.util.Base64;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ValidaCurpController {
+    //Encontrar una manera de tener una lista de Strings constantes
     String username = "axa-guillermocamachodelapaz";
     String password = "kb_#7Y.9D";
     String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
@@ -36,6 +37,10 @@ public class ValidaCurpController {
     @POST
     @Path("/valida-curp")
     public String validarCurp(ValidaCurpRequest data){
+        //Comienza Flujo de validacion
+        //Se revisa si la CURP ya esta dentro de nuestra base de datos
+        //En caso de estar RETURN "OK";
+        //En cAso de que no, comienza flujo de Validacion en Data Power
         try {
             Response response = nubariumApiClient.validaCurp(authorizationHeader,data);
             return "CURP: "+response.readEntity(ValidaCurpResponse.class).curp+"\nEstatus de Curp: "+ response.readEntity(ValidaCurpResponse.class).estatus;

@@ -4,13 +4,16 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.ss.usermodel.*;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 
 @Path("/archivo")
 @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -36,6 +39,38 @@ public class ObtieneCurpDeArchivoController {
         }catch (IOException e){
             e.printStackTrace();
             return "error";
+        }
+    }
+
+    @POST
+    @Path("/leerArchivoExcel")
+    public String ObtieneCurpDeArchivoExcel(InputStream input) throws IOException {
+
+        try {
+            String excelFilePath = "src/main/resources/archivos/CurpDelCarlos.xlsx";
+
+            // Cargamos el archivo Excel
+            InputStream inputStream = new FileInputStream(new File(excelFilePath));
+
+            // Creamos un objeto Workbook que representa el archivo Excel
+            Workbook workbook = WorkbookFactory.create(input);
+
+            // Obtener la primera hoja
+            Sheet sheet = workbook.getSheetAt(0);
+
+            Row row = sheet.getRow(1);
+            Cell cell = row.getCell(4);
+
+            String cellValue = cell.toString();
+
+            // Cerrar el flujo de entrada
+            // Cerrar el objeto Workbook
+            //workbook.close();
+
+            return cellValue;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error al procesar el archivo Excel: " + e.getMessage();
         }
     }
 }

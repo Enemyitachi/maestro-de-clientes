@@ -1,19 +1,25 @@
 package org.acme.curp.obtieneCurpDeArchivo.Controlador;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jboss.resteasy.reactive.PartType;
+import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
 
 @Path("/archivo")
 @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -36,41 +42,49 @@ public class ObtieneCurpDeArchivoController {
                 System.out.println("No se encontró ninguna CURP en el archivo.");
             }
             return matcher.group();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             return "error";
         }
     }
 
     @POST
-    @Path("/leerArchivoExcel")
-    public String ObtieneCurpDeArchivoExcel(InputStream input) throws IOException {
-
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("leerArchivoExcel")
+    public Response obtenerCurpDeArchivoExcel(@FormParam("someFile") File file) {
         try {
-            String excelFilePath = "src/main/resources/archivos/CurpDelCarlos.xlsx";
+            Workbook workbook = new XSSFWorkbook(file);
+            Sheet sheet = workbook.getSheetAt(0); // Asumiendo que queremos la primera hoja
+            Row row = sheet.getRow(1); // Asumiendo que queremos la primera fila
+            Cell cell = row.getCell(4); // Asumiendo que queremos la primera columna
 
-            // Cargamos el archivo Excel
-            InputStream inputStream = new FileInputStream(new File(excelFilePath));
+            String cellValue = getCellValueAsString(cell);
+            // Procesa aquí el valor de la celda
 
-            // Creamos un objeto Workbook que representa el archivo Excel
-            Workbook workbook = WorkbookFactory.create(input);
+            return Response.ok("Celda leída: " + cellValue).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al leer el archivo").build();
+        }
+    }
 
-            // Obtener la primera hoja
-            Sheet sheet = workbook.getSheetAt(0);
-
-            Row row = sheet.getRow(1);
-            Cell cell = row.getCell(4);
-
-            String cellValue = cell.toString();
-
-            // Cerrar el flujo de entrada
-            // Cerrar el objeto Workbook
-            //workbook.close();
-
-            return cellValue;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error al procesar el archivo Excel: " + e.getMessage();
+    private String getCellValueAsString(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return Double.toString(cell.getNumericCellValue());
+                }
+            case BOOLEAN:
+                return Boolean.toString(cell.getBooleanCellValue());
+            default:
+                return "";
         }
     }
 }
+
+
+
+

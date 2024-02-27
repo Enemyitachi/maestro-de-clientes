@@ -15,4 +15,12 @@ public class ValidaCurpRequest {
     String fechaNacimiento;
     @JsonProperty("apellidoMaterno")
     String apellidoMaterno;
+
+    public String getCurp() {
+        return curp;
+    }
+
+    public void setCurp(String curp) {
+        this.curp = curp;
+    }
 }

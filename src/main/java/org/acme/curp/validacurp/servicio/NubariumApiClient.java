@@ -17,6 +17,6 @@ public interface NubariumApiClient {
     @Consumes(MediaType.APPLICATION_JSON)
     Response validaCurp(
             @HeaderParam("Authorization") String authorizationHeader,
-            ValidaCurpRequest datos
+            ValidaCurpRequest data
     );
 }

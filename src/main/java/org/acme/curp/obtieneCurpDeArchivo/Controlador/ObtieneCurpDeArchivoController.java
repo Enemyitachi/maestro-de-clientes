@@ -5,24 +5,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.curp.validacurp.controlador.ValidaCurpController;
-import org.acme.curp.validacurp.controlador.ValidaEstructuraCurp;
 import org.acme.curp.validacurp.modelo.ValidaCurpRequest;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jboss.resteasy.reactive.PartType;
-import org.jboss.resteasy.reactive.RestForm;
-import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 
 @Path("/archivo")
